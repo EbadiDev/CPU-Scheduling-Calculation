@@ -1,50 +1,67 @@
-process = {"P1":[0,30],
-           "P2":[0,20],
-           "P3":[0,1]}
+import RoundRobin
+import ShortestJobFirst
 
-arrival_times = {"P1":0,
-                 "P2":0,
-                 "P3":0}
+import os
 
-# returnTimes = {}
-returnTimes = []
-responeTimes = [] # when first cpu time
-burstTime = 0
-cpuFirst = 0
-while len(process) > 0:
-    
-    print(process)
-    lowest_key = min(process, key=lambda k: (process[k][0], process[k][1]))
-    print("selected process:", lowest_key)
-    
-    numbers = []
-    for key in process:
-        if key != lowest_key:
-            process[key] = [max(process[key][0] - process[lowest_key][1], 0), process[key][1]]
-        else :
-            # returnTimes.append(process[key][1])
-            # returnTimes[process].append(burstTime)
-            arrive = arrival_times[key]
-            # yek marhale qabl az jam kardan burst time mishe shoro process ke vared shode
-            whatIsHappeningHere2 = burstTime - arrive
-            responeTimes.append(whatIsHappeningHere2) 
+def clear_terminal():
+    if os.name == 'nt':  # For Windows
+        _ = os.system('cls')
+    else:  # For Linux and macOS
+        _ = os.system('clear')
 
-            burstTime += process[key][1]
-
-            # arrive = process[lowest_key][0] # 
-
-            print("Arrival time for", lowest_key, "is", arrive)
-            whatIsHappeningHere = burstTime - arrive
-            returnTimes.append(whatIsHappeningHere)
-
+def main(processes,arrivalTime):
+    print_info = """
+         █████╗ ██████╗  ██████╗██╗  ██╗ ███╗   ██╗███████╗████████╗
+        ██╔══██╗██╔══██╗██╔════╝██║  ██║ ████╗  ██║██╔════╝╚══██╔══╝
+        ███████║██████╔╝██║     ███████║ ██╔██╗ ██║█████╗     ██║   
+        ██╔══██║██╔══██╗██║     ██╔══██║ ██║╚██╗██║██╔══╝     ██║   
+        ██║  ██║██║  ██║╚██████╗██║  ██║ ██║ ╚████║███████╗   ██║   
+        ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝ ╚═╝  ╚═══╝╚══════╝   ╚═╝   
+             sign up now for cheap vpn at hub.archnet.online   
+             
+                                                     
+                                                                            
+            Select Type of CPU Scheduling Calculation: 
+            ────────────────────────────────────────
             
-            
-    print(f"{lowest_key} job has done and take {process[lowest_key][1]} CPU Time")
-    del process[lowest_key]
-    print("Updated process:", process)
+            1. Round Robin (RR)
+            2. Shortest Job First (SJF)
+    """
+    print(print_info)
+    try:
+        select = int(input())
+    except ValueError:
+        print("Exting")
+    
+    try:
+        if select == 1:
+            clear_terminal()
+            print("Round Robin (RR)")
+            RoundRobin.RoundRobinScheduler().run()
+        elif select == 2:
+            print("Shortest Job First (SJF)")
+            sjf = ShortestJobFirst.ProcessScheduler(processes, arrivalTime)
+            sjf.schedule_processes()
+            sjf.print_results()
+        else:
+            raise ValueError("Select 1 or 2")
+    except ValueError:
+        print("Select 1 or 2")
+        
+        
+if __name__ == "__main__":
+    # For SJF we most initial variables 
+    # processes = {"P1": [0, 4],
+    #                  "P2": [2, 1],
+    #                  "P3": [0, 2],
+    #                  "P4": [4, 6]}
+    # arrival_times = {"P1": 0, "P2": 2, "P3": 0, "P4": 4}
+    process = {"P1":[2,2],
+           "P2":[7,1],
+           "P3":[5,1]}
 
-avg_return_time = sum(returnTimes) / len(returnTimes)
-print(f"Average Return Time: {avg_return_time}s", )
-
-avg_response_time = sum(responeTimes) / len(responeTimes)
-print(f"Average response Time: {avg_response_time}s")
+    arrival_times = {"P1":2,
+                    "P2":7,
+                    "P3":5}
+    # Run 
+    main(process,arrival_times)   
