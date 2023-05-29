@@ -1,8 +1,8 @@
-Make a program that simulate SJF ( Shortest Job First ) CPU scheduling algorithm
+Make a program that simulate SJF ( Shortest Job First ) and RR ( Round Robin ) CPU scheduling algorithm
 
 how it's works?
 
-
+for SJF : 
 | Process name | Arrive time | Burst time |
 | -- | -- | -- |
 |P1| 0 | 4 |
